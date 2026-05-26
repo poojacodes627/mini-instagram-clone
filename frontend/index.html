@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Mini Instagram Clone</title>
+
+<style>
+
+body{
+margin:0;
+padding:0;
+background:#111827;
+font-family:Arial;
+color:white;
+}
+
+.container{
+width:60%;
+margin:auto;
+padding-top:20px;
+}
+
+h1{
+text-align:center;
+margin-bottom:30px;
+}
+
+.create-post{
+background:#1f2937;
+padding:20px;
+border-radius:15px;
+margin-bottom:30px;
+}
+
+input,textarea{
+width:100%;
+padding:15px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+font-size:16px;
+}
+
+textarea{
+height:100px;
+}
+
+.add-btn{
+margin-top:15px;
+padding:12px 20px;
+background:#3b82f6;
+border:none;
+border-radius:10px;
+color:white;
+cursor:pointer;
+font-size:16px;
+}
+
+.post-card{
+background:#1f2937;
+padding:20px;
+border-radius:15px;
+margin-top:20px;
+}
+
+.profile{
+display:flex;
+align-items:center;
+margin-bottom:15px;
+}
+
+.profile img{
+width:50px;
+height:50px;
+border-radius:50%;
+margin-right:10px;
+}
+
+.actions{
+display:flex;
+gap:10px;
+margin-top:15px;
+flex-wrap:wrap;
+}
+
+.actions button{
+padding:10px 15px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+color:white;
+}
+
+.like-btn{
+background:#ec4899;
+}
+
+.comment-btn{
+background:#8b5cf6;
+}
+
+.share-btn{
+background:#22c55e;
+}
+
+.save-btn{
+background:#f59e0b;
+}
+
+.delete-btn{
+background:red;
+}
+
+.comment-box{
+margin-top:15px;
+}
+
+.comment-box input{
+padding:10px;
+}
+
+.comment{
+background:#374151;
+padding:10px;
+border-radius:8px;
+margin-top:8px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Mini Instagram Clone 🚀</h1>
+
+<div class="create-post">
+
+<input
+type="text"
+id="title"
+placeholder="Enter username"
+/>
+
+<textarea
+id="content"
+placeholder="What's happening?"
+></textarea>
+
+<button
+class="add-btn"
+onclick="addPost()"
+>
+Post
+</button>
+
+</div>
+
+<div id="posts"></div>
+
+</div>
+
+<script>
+
+let posts = [];
+
+function addPost(){
+
+const title =
+document.getElementById("title").value;
+
+const content =
+document.getElementById("content").value;
+
+if(!title || !content){
+alert("Fill all fields");
+return;
+}
+
+const post = {
+id: Date.now(),
+title,
+content,
+likes:0,
+saved:false,
+comments:[]
+};
+
+posts.unshift(post);
+
+document.getElementById("title").value = "";
+document.getElementById("content").value = "";
+
+displayPosts();
+}
+
+function displayPosts(){
+
+const postsContainer =
+document.getElementById("posts");
+
+postsContainer.innerHTML = "";
+
+posts.forEach(post => {
+
+postsContainer.innerHTML += `
+
+<div class="post-card">
+
+<div class="profile">
+
+<img src="https://i.pravatar.cc/150?img=${post.id % 70}" />
+
+<div>
+<h3>${post.title}</h3>
+<small>Just now</small>
+</div>
+
+</div>
+
+<p>${post.content}</p>
+
+<p>❤️ ${post.likes} Likes</p>
+
+<div class="actions">
+
+<button
+class="like-btn"
+onclick="likePost(${post.id})"
+>
+❤️ Like
+</button>
+
+<button
+class="share-btn"
+onclick="sharePost()"
+>
+📤 Share
+</button>
+
+<button
+class="save-btn"
+onclick="savePost(${post.id})"
+>
+${post.saved ? "✅ Saved" : "🔖 Save"}
+</button>
+
+<button
+class="delete-btn"
+onclick="deletePost(${post.id})"
+>
+Delete
+</button>
+
+</div>
+
+<div class="comment-box">
+
+<input
+type="text"
+id="comment-${post.id}"
+placeholder="Write comment..."
+/>
+
+<button
+class="comment-btn"
+onclick="addComment(${post.id})"
+>
+💬 Comment
+</button>
+
+<div id="comments-${post.id}">
+${post.comments.map(c =>
+`<div class="comment">${c}</div>`
+).join("")}
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+function likePost(id){
+
+posts = posts.map(post => {
+
+if(post.id === id){
+post.likes++;
+}
+
+return post;
+
+});
+
+displayPosts();
+}
+
+function savePost(id){
+
+posts = posts.map(post => {
+
+if(post.id === id){
+post.saved = !post.saved;
+}
+
+return post;
+
+});
+
+displayPosts();
+}
+
+function deletePost(id){
+
+posts = posts.filter(post => post.id !== id);
+
+displayPosts();
+}
+
+function addComment(id){
+
+const input =
+document.getElementById(`comment-${id}`);
+
+const comment = input.value;
+
+if(!comment) return;
+
+posts = posts.map(post => {
+
+if(post.id === id){
+post.comments.push(comment);
+}
+
+return post;
+
+});
+
+displayPosts();
+}
+
+function sharePost(){
+
+alert("Post shared 🚀");
+
+}
+
+</script>
+
+</body>
+
+</html>
